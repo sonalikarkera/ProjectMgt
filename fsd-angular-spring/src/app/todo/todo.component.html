@@ -1,0 +1,12 @@
+<table >
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+    </tr>
+    <tr *ngFor="let todo of todos">
+        <td>{{todo.name}}</td>
+        <td>{{todo.email}}</td>
+    </tr>
+</table>
+<br/>
+<a routerLink="/addtodo" class="btn btn-info">Add Todo</a>
