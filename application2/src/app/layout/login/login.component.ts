@@ -1,10 +1,10 @@
 import { Router } from "@angular/router";
-import { ApiService } from "../apiservice.service";
-import { ServiceService} from '../service.service';
+import { ApiService } from "../../services/apiservice.service";
+import { ServiceService } from '../../services/service.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { User } from '../user';
-import { UserserviceService } from '../userservice.service';
+import { User } from '../../models/user';
+import { UserserviceService } from '../../services/userservice.service';
 import { identifierModuleUrl } from '@angular/compiler';
 var $: any;
 @Component({
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
 
   user: User;
   constructor(private router: Router, private apiService: ApiService, private service: ServiceService
-    ,private userService: UserserviceService) {
+    , private userService: UserserviceService) {
     this.user = new User();
     this.loginForm = new FormGroup({
       username: new FormControl('', [Validators.required]),
@@ -69,10 +69,10 @@ export class LoginComponent implements OnInit {
       if (data.status === 200) {
         window.localStorage.setItem('token', data.result.token);
         sessionStorage.setItem('username', loginPayload.username);
-        sessionStorage.setItem('empid',data.result.userId);
-    
-        console.log(data);
-        this.router.navigate(['success']);
+        sessionStorage.setItem('empid', data.result.userId);
+
+        console.log("admin");
+        this.router.navigate(['side-nav']);
       }
       else if (data.status === 201) {
         window.localStorage.setItem('token', data.result.token);
@@ -84,41 +84,48 @@ export class LoginComponent implements OnInit {
       }
       else if (data.status === 202) {
         window.localStorage.setItem('token', data.result.token);
-        sessionStorage.setItem('token',data.result.token);
+        sessionStorage.setItem('token', data.result.token);
         sessionStorage.setItem('username', loginPayload.username);
-        sessionStorage.setItem('empid',data.result.employeeId);
-      //   console.log(data.result.username);
-      // console.log(data.result.employeeId);
-        console.log("manager");
-        this.service.check(loginPayload).subscribe(data => {
+        sessionStorage.setItem('empid', data.result.employeeId);
+        // //   console.log(data.result.username);
+        // // console.log(data.result.employeeId);
+        // console.log("manager");
+        // this.service.check(loginPayload).subscribe(data => {
+        //   if (data.status === 200) {
+            this.router.navigate(['manager']);
+        //   }
+        //   else {
+        //     console.log("ian here");
+        //     this.router.navigate(['agreedoc'])
+        //   }
 
 
+        // });
 
-        });
-        this.router.navigate(['manager']);
       }
-      else if(data.status=== 401){
+      else if (data.status === 401) {
         this.invalidLogin = true;
-        alert("Invalid username and password");}
-      else{
+        alert("Invalid username and password");
+      }
+      else {
 
       }
     });
   }
   sendmail(value) {
     console.log(value);
-  const userpayload={
-    username: value
-  }
+    const userpayload = {
+      username: value
+    }
     this.userService.sendMail(userpayload).subscribe(data => {
-      if(data==true){
+      if (data == true) {
         console.log("Mail sent");
         alert("Credentials has been sent to your registered mail id");
 
       }
-     else{
-      alert("Please enter valid credentials ");
-     }
+      else {
+        alert("Please enter valid credentials ");
+      }
     })
   }
 
